@@ -92,6 +92,20 @@ def scrap_wiki(topic):
                     console.print(lnk, style="cyan")
                 console.print("=" * 60 + "\n", style="bold yellow")
 
+                # Log results to a file
+                with open(f"{title.replace(' ', '_')}.txt", "w", encoding="utf-8") as file:
+                    file.write(f"Title: {title}\n")
+                    file.write(f"Summary: {summary}\n")
+                    file.write(f"Image: {image_url}\n")
+                    file.write(f"Last Edited: {last_edit_date}\n")
+                    file.write("Related Links:\n")
+                    
+                    for lnk in links[:5]:  # Show only the first 5 links
+                        file.write(f"{lnk}\n")
+
+
+
+
             else:
                 console.print("❌ Failed to fetch the Wikipedia page.", style="bold red")
         else:
