@@ -1,0 +1,16 @@
+# ==========================================
+#   🛠 Open Crawler - Dependencies List 🕵️‍♂️
+# ==========================================
+
+# 🌐 Networking & API Requests
+requests          # Handles HTTP requests to Wikipedia API
+
+# 🥣 Web Scraping
+beautifulsoup4    # Parses HTML and extracts data
+
+# 🎨 Fancy Terminal Output
+rich             # Adds color and style to CLI output
+
+# ==========================================
+# ✅ To install: `pip install -r requirements.txt`
+# ==========================================
