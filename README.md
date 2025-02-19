@@ -1,6 +1,7 @@
 # **Open Crawler - Wikipedia Scraper**  
 
 ## 📌 **Overview**  
+My first ever web crawler. In order to keep this simple I used wikipedia page to scrape. I hope this will be of some help to people who are new to web scraping and can get to know how one works in the most basic level.   
 Open Crawler is a **command-line Wikipedia scraper** that fetches details about a given topic using the **Wikipedia API and BeautifulSoup**. It retrieves the **title, summary, main image, last edited date, and related Wikipedia links** and displays them in a beautifully styled format using the **`rich`** library.  
 
 The results are also **saved to a text file** for easy reference.  
