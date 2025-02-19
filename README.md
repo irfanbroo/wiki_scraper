@@ -41,6 +41,8 @@ Enter a Wikipedia topic: Python programming
 ```
 
 Example output:  
+![Screenshot](https://github.com/irfanbroo/wiki_scraper/blob/main/Screenshot%202025-02-19%20205257.png)
+
 ```
 ============================================================
 📌 Title: Python (programming language)
