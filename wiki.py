@@ -1,5 +1,28 @@
 import requests
 from bs4 import BeautifulSoup
+import re
+from rich.console import Console
+
+console = Console()
+
+# Banner
+console.print(
+    """[medium_spring_green]
+  ______                                        ______                                    __       
+ /      \                                      /      \                                  |  \      
+|  $$$$$$\  ______    ______   _______        |  $$$$$$\  ______   ______   __   __   __ | $$      
+| $$  | $$ /      \  /      \ |       \       | $$   \$$ /      \ |      \ |  \ |  \ |  \| $$      
+| $$  | $$|  $$$$$$\|  $$$$$$\| $$$$$$$\      | $$      |  $$$$$$\ \$$$$$$\| $$ | $$ | $$| $$      
+| $$  | $$| $$  | $$| $$    $$| $$  | $$      | $$   __ | $$   \$$/      $$| $$ | $$ | $$| $$      
+| $$__/ $$| $$__/ $$| $$$$$$$$| $$  | $$      | $$__/  \| $$     |  $$$$$$$| $$_/ $$_/ $$| $$      
+ \$$    $$| $$    $$ \$$     \| $$  | $$       \$$    $$| $$      \$$    $$ \$$   $$   $$| $$      
+  \$$$$$$ | $$$$$$$   \$$$$$$$ \$$   \$$        \$$$$$$  \$$       \$$$$$$$  \$$$$$\$$$$  \$$      
+          | $$                                                                                     
+          | $$                                                                                     
+           \$$                                                               [bold]v 1.0.0[/bold]  
+    [/medium_spring_green]"""
+)
+
 
 
 def scrap_wiki(topic):
@@ -25,29 +48,59 @@ def scrap_wiki(topic):
                 title = soup.find("h1", id="firstHeading").text
 
                 # Extracting the summary (first paragraph)
-                summary = soup.find("p").text.strip()
+                summary = "No summary available for this topic, lol (what did you even search)"
+                for para in soup.find_all("p"):
+                    if para.text.strip() and len(para.text.strip()) > 5:
+                        summary = para.text.strip()
+                        break
 
-                # Extracting table of contents
-                toc = soup.find("div", id="toc")
-                if toc:
-                    table_of_contents = [li.text for li in toc.find_all("span", class_="toctext")]
+                # Extracting the first image
+                image_url = "No image available for this topic"
+                image_table = soup.find("table", class_="infobox") # Finding the infobox table
+
+                if image_table:
+                    image_tag = image_table.find("img") # Finding the tag of first image, for example image_tag =  <img src="//upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Example.jpg/250px-Example.jpg" alt="Example image">
+                    image_url = f"https:{image_tag['src']}" if image_tag else "No image available"
+                
                 else:
-                    table_of_contents = "No Table of Contents found."
+                    print("No image available")
+
+                # Extracting related links
+                links = []
+
+                for link in soup.find_all("a", href=True):
+                    href = link['href']
+                    if re.match(r"^/wiki/[^:]+$", href):  # Ignore non-article links
+                        links.append(f"https://en.wikipedia.org{href}")
+
+                # Fetching last edited date
+                last_edit = soup.find("li", id="footer-info-lastmod")
+                last_edit_date = last_edit.text.strip() if last_edit else "Cannot find last edited date"
 
 
+                
+                
 
-
-
-                # Now, lets display all the stuffs 
-
-                print(f"\n Title: {title}\n")
-                print(f"Summary: {summary} \n")
-                print(f"Table of Contents: {table_of_contents}\n")
+                # Now, lets display all the stuffs
+                console.print("\n" + "=" * 60, style="bold yellow")
+                console.print(f"📌 [bold cyan]Title:[/bold cyan] {title}\n")
+                console.print(f"📖 [bold green]Summary:[/bold green] {summary}\n")
+                console.print(f"🖼 [bold magenta]Image:[/bold magenta] {image_url}\n")
+                console.print(f"🕒 [bold blue]{last_edit_date}[/bold blue]\n")
+                console.print("🔗 [bold red]Related Links:[/bold red]")
+                for lnk in links[:5]:  # Show only the first 5 links
+                    console.print(lnk, style="cyan")
+                console.print("=" * 60 + "\n", style="bold yellow")
 
             else:
-                print("No results for the given topic")
+                console.print("❌ Failed to fetch the Wikipedia page.", style="bold red")
         else:
-            print("Failed to fetch search results")
+            console.print("❌ No results found for the given topic.", style="bold red")
+    else:
+        console.print("❌ Failed to fetch search results from Wikipedia.", style="bold red")
+
+
+                
                 
 
 
