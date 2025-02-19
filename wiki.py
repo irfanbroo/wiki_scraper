@@ -60,10 +60,10 @@ def scrap_wiki(topic):
 
                 if image_table:
                     image_tag = image_table.find("img") # Finding the tag of first image, for example image_tag =  <img src="//upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Example.jpg/250px-Example.jpg" alt="Example image">
-                    image_url = f"https:{image_tag['src']}" if image_tag else "No image available"
+                    if image_tag:
+                        image_url = f"https:{image_tag['src']}"
                 
-                else:
-                    print("No image available")
+                
 
                 # Extracting related links
                 links = []
